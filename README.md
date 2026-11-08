@@ -105,3 +105,12 @@ A cPanel account can't keep a long-running process alive, so this needs root.
 
    `/app` carries the WebSocket connections and `/apps` is the HTTP API that apps publish events through.
    Then run `/scripts/rebuildhttpdconf && systemctl restart httpd`.
+
+## Current deployment (staging)
+
+- URL: `wss://ui.staging.oriclabdev.com/app/<key>` (WebSockets) and `https://ui.staging.oriclabdev.com/apps/...` (publish API).
+  It sits at the root of `ui.staging` because native Pusher SDKs can't use a path prefix. The other apps live in subfolders, so nothing collides.
+- Code: `~stagingoriclabde/reverb-hub`. Update with `cd ~/reverb-hub && bash scripts/deploy.sh`.
+- Service: `systemctl status reverb-hub` (root), listening on `127.0.0.1:8090`. Logs: `journalctl -u reverb-hub`.
+- Apache include: `/etc/apache2/conf.d/userdata/ssl/2_4/stagingoriclabde/ui.staging.oriclabdev.com/reverb.conf`.
+- Add an app on the server: `cd ~/reverb-hub && php artisan reverb:add-app <name> --origins=... && php artisan config:cache && php artisan reverb:restart`.
