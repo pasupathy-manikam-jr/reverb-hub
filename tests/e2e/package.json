@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": { "pusher-js": "^8.4.0", "ws": "^8.18.0" }
+}
